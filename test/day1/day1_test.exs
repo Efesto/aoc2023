@@ -4,18 +4,34 @@ defmodule Aoc2023.Day1Test do
   @tag :tmp_dir
   test "calibration_example", %{tmp_dir: tmp_dir} do
     input =
-      "1abc2
-pqr3stu8vwx
-a1b2c3d4e5f
-treb7uchet"
+      "two1nine
+        eightwothree
+        abcone2threexyz
+        xtwone3four
+        4nineeightseven2
+        zoneight234
+        7pqrstsixteen"
 
     file_path = tmp_dir <> "/input"
     File.write!(file_path, input)
 
-    assert Aoc2023.Day1.run(file_path) == 142
+    assert Aoc2023.Day1.run(file_path) == 281
   end
 
-  [{"1abc2", 12}, {"a1b2c3d4e5f", 15}, {"treb7uchet", 77}]
+  [
+    {"two1nine", 29},
+    {"4nineeightseven2", 42},
+    {"7pqrstsixteen", 76},
+    {"zoneight234", 14},
+    {"eightwothree", 83},
+    {"eighthree", 83},
+    {"ctpkqsdqz97zqptzjlfbtwo", 92},
+    {"fourthreefivepxqrrjm7threezjsdhfs", 43},
+    {"8qlhdpxn645nhrjm", 85},
+    {"26two", 22},
+    {"m2", 22},
+    {"3four3", 33}
+  ]
   |> Enum.each(fn {input, expected} ->
     @input input
     @expected expected
