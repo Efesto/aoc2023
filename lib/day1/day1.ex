@@ -12,48 +12,29 @@ defmodule Aoc2023.Day1 do
     digits =
       line
       |> normalize()
-      |> String.graphemes()
-      |> Enum.reduce([], fn char, acc ->
-        case Integer.parse(char) do
-          :error -> acc
-          {integer, _} -> [integer | acc]
-        end
-      end)
+      |> then(fn x -> Regex.scan(~r/\d/, x) end)
+      |> List.flatten
 
-    "#{hd(digits |> Enum.reverse())}#{hd(digits)}" |> String.to_integer()
+    "#{hd(digits)}#{hd(digits |> Enum.reverse())}" |> String.to_integer()
   end
 
   defp normalize(line) do
-    replacements = [
-      {"one", "1"},
-      {"two", "2"},
-      {"three", "3"},
-      {"four", "4"},
-      {"five", "5"},
-      {"six", "6"},
-      {"seven", "7"},
-      {"eight", "8"},
-      {"nine", "9"},
-    ]
+    replacements = %{
+      "one" => "1",
+      "two" => "2",
+      "three" => "3",
+      "four" => "4",
+      "five" => "5",
+      "six" => "6",
+      "seven" => "7",
+      "eight" => "8",
+      "nine" => "9",
+    }
 
-    pattern = replacements
+    replacements
     |> Enum.map(fn {key, _} -> key end)
-    |> Enum.join("|")
-
-    line
-    |> IO.inspect
-
-    Regex.scan(~r/#{pattern}|\d+/, line)
-    |> IO.inspect
-    |> Enum.reduce([], fn match, acc ->
-      value = case List.keyfind(replacements, hd(match), 0) do
-        {_, digit} -> digit
-        _ -> hd(match)
-      end
-      [value | acc]
+    |> Enum.reduce(line, fn match, acc ->
+      String.replace(acc, match, "#{match}#{Map.get(replacements, match)}#{match}")
     end)
-    |> Enum.reverse
-    |> Enum.join
-    |> IO.inspect
   end
 end
